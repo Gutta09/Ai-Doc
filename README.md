@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Doc
 
-## Getting Started
+Welcome to AI Doc, a platform where users can chat with AI-powered documents. With AI Doc, users can upload documents and interact with them through a chat interface, leveraging the power of artificial intelligence for document analysis and conversation.
 
-First, run the development server:
+## About the Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+AI Doc is an innovative project that aims to enhance document interaction by incorporating AI technology. Users can upload various types of documents, such as articles, reports, or essays, and engage in conversations with AI models trained to understand and analyze the content of the documents.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Please note that AI Doc is still in the development stage, and certain features may be limited or experimental. We are constantly working to improve and expand the capabilities of the platform to provide a seamless and intuitive user experience.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Document Upload**: Upload documents in various formats (e.g., PDF, DOCX) to the platform.
+- **AI Document Analysis**: Use AI models to analyze and understand the content of uploaded documents.
+- **Chat Interface**: Engage in conversations with AI models to ask questions or discuss the content of documents.
+- **Experimental Features**: Explore experimental features and functionalities as we continue to develop and refine the platform.
 
-## Learn More
+## How to Use
 
-To learn more about Next.js, take a look at the following resources:
+1. **Upload Documents**: Upload documents that you want to analyze and interact with using the chat interface.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Start Chatting**: Initiate a conversation with the AI model by typing your questions or comments in the chat interface.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. **Explore Features**: Experiment with different features and functionalities of the platform and provide feedback on your experience.
 
-## Deploy on Vercel
+## Future Plans
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Enhance AI models for better document analysis and understanding.
+- Implement additional features such as document summarization, keyword extraction, and more.
+- Improve the user interface and overall user experience based on feedback and suggestions.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Feedback and Support
+
+As AI Doc is still in the working mode, your feedback and suggestions are invaluable to help us improve the platform. If you encounter any issues, have ideas for new features, or would like to provide general feedback, please don't hesitate to [contact us]. We appreciate your support!
+
+## Credits
+
+- Project developed by [Sathwik Batta]
+- Technologies used:
+  - Nextjs
+  - Firebase
+  - TailwindCss
+
+## Screenshots
+
+![Screenshot](https://github.com/sathwikcodes/Ai-Doc/blob/main/Screenshot%20(171).png)
+![Screenshot](https://github.com/sathwikcodes/Ai-Doc/blob/main/Screenshot%20(172).png)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

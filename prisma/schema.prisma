@@ -1,0 +1,79 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [vector]
+}
+
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
+}
+
+model User {
+  id    String @id // Kinde user id
+  email String @unique
+
+  File    File[]
+  Message Message[]
+
+  createdAt DateTime @default(now())
+}
+
+model File {
+  id           String       @id @default(cuid())
+  name         String
+  uploadStatus UploadStatus @default(PENDING)
+
+  url String
+  key String
+
+  messages Message[]
+  chunks   Chunk[]
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id            String  @id @default(cuid())
+  text          String  @db.Text
+  isUserMessage Boolean
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  File   File?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  fileId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// One embedded chunk of a File's text. The `embedding` column is a pgvector
+/// column (vector(1024) — matches voyage-3.5 default dimensions). Prisma treats
+/// it as Unsupported, so it is written and queried via raw SQL (`<=>` cosine
+/// distance) rather than the typed client.
+model Chunk {
+  id      String @id @default(cuid())
+  content String @db.Text
+
+  embedding Unsupported("vector(1024)")?
+
+  File   File   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  fileId String
+
+  createdAt DateTime @default(now())
+
+  @@index([fileId])
+}

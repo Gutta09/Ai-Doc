@@ -1,30 +1,28 @@
 import { NextRequest } from "next/server";
-import { z } from "zod";
 import { anthropic } from "@ai-sdk/anthropic";
 import { streamText, type CoreMessage } from "ai";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { db } from "@/db";
 import { embedQuery, toVectorLiteral } from "@/lib/voyage";
+import { messageBodySchema } from "@/lib/validators";
 
 // Allow streaming responses up to 60 seconds on Vercel.
 export const maxDuration = 60;
 
-const bodySchema = z.object({
-  fileId: z.string(),
-  messages: z.array(
-    z.object({
-      role: z.enum(["user", "assistant", "system"]),
-      content: z.string(),
-    })
-  ),
-});
+// Cost guard: cap how many messages a user can send per hour. DB-backed so it
+// works across serverless instances (in-memory counters don't survive there).
+const HOURLY_MESSAGE_LIMIT = 30;
+
+// Default to Sonnet for a sane cost profile on a public demo; override with
+// ANTHROPIC_MODEL (e.g. "claude-opus-4-8" for maximum answer quality).
+const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5";
 
 export async function POST(req: NextRequest) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   if (!user?.id) return new Response("Unauthorized", { status: 401 });
 
-  const parsed = bodySchema.safeParse(await req.json());
+  const parsed = messageBodySchema.safeParse(await req.json());
   if (!parsed.success) {
     return new Response("Invalid request body", { status: 400 });
   }
@@ -41,6 +39,21 @@ export async function POST(req: NextRequest) {
     .find((m) => m.role === "user");
   if (!lastUserMessage) {
     return new Response("No user message provided", { status: 400 });
+  }
+
+  // Rate limit: messages sent by this user in the past hour.
+  const recentCount = await db.message.count({
+    where: {
+      userId: user.id,
+      isUserMessage: true,
+      createdAt: { gte: new Date(Date.now() - 60 * 60 * 1000) },
+    },
+  });
+  if (recentCount >= HOURLY_MESSAGE_LIMIT) {
+    return new Response(
+      "Rate limit reached — please wait a while before sending more messages.",
+      { status: 429 }
+    );
   }
 
   // Persist the user's message.
@@ -78,9 +91,7 @@ ${context || "(no relevant text found)"}
     .map((m) => ({ role: m.role, content: m.content }));
 
   const result = streamText({
-    // Default to Claude Opus 4.8 for best answer quality. For a cost-sensitive
-    // public demo, switch to "claude-haiku-4-5" or "claude-sonnet-5".
-    model: anthropic("claude-opus-4-8"),
+    model: anthropic(MODEL),
     system,
     messages: recent,
     onFinish: async ({ text }) => {

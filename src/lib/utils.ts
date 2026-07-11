@@ -16,7 +16,7 @@ export function absoluteUrl(path: string) {
 export function constructMetadata({
   title = "AI Doc — Chat with your PDF documents",
   description = "AI Doc lets you have a conversation with any PDF. Upload your file and get instant answers grounded in its contents, powered by Claude.",
-  image = "/thumbnail.png",
+  image,
   icons = "/favicon.ico",
   noIndex = false,
 }: {
@@ -32,7 +32,7 @@ export function constructMetadata({
     openGraph: {
       title,
       description,
-      images: [{ url: image }],
+      ...(image ? { images: [{ url: image }] } : {}),
     },
     icons,
     metadataBase: new URL("https://ai-doc.vercel.app"),

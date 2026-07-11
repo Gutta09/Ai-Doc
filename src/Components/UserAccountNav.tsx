@@ -10,7 +10,6 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
 import Image from "next/image";
 import { Icons } from "./Icons";
 import Link from "next/link";
-import { Gem } from "lucide-react";
 
 interface UserAccountNavProps {
   email: string | undefined;
@@ -59,12 +58,6 @@ const UserAccountNav = ({ email, imageUrl, name }: UserAccountNavProps) => {
 
         <DropdownMenuItem asChild>
           <Link href="/dashboard">Dashboard</Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem asChild>
-          <Link href="/pricing">
-            Upgrade <Gem className="text-blue-600 h-4 w-4 ml-1.5" />
-          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

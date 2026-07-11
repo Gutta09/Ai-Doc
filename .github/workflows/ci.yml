@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://u:p@localhost:5432/db
+      DIRECT_URL: postgresql://u:p@localhost:5432/db
+      KINDE_CLIENT_ID: ci
+      KINDE_CLIENT_SECRET: ci
+      KINDE_ISSUER_URL: https://ci.kinde.com
+      KINDE_SITE_URL: http://localhost:3000
+      KINDE_POST_LOGOUT_REDIRECT_URL: http://localhost:3000
+      KINDE_POST_LOGIN_REDIRECT_URL: http://localhost:3000/auth-callback
+      UPLOADTHING_TOKEN: ci
+      VOYAGE_API_KEY: ci
+      ANTHROPIC_API_KEY: ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

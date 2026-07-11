@@ -7,6 +7,12 @@ import { embedDocuments, toVectorLiteral } from "@/lib/voyage";
 
 const f = createUploadthing();
 
+// Ingestion cost guards: a 16MB PDF can produce thousands of chunks, and every
+// chunk is an embedding API call. Cap both dimensions and fail loudly instead
+// of silently running up a bill.
+const MAX_PAGES = 150;
+const MAX_CHUNKS = 500;
+
 export const ourFileRouter = {
   pdfUploader: f({ pdf: { maxFileSize: "16MB", maxFileCount: 1 } })
     .middleware(async () => {
@@ -35,10 +41,16 @@ export const ourFileRouter = {
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        const { chunks } = await pdfBufferToChunks(buffer);
+        const { chunks, numPages } = await pdfBufferToChunks(buffer);
 
         if (chunks.length === 0) {
           throw new Error("No extractable text found in PDF");
+        }
+        if (numPages > MAX_PAGES) {
+          throw new Error(`PDF has ${numPages} pages — the limit is ${MAX_PAGES}`);
+        }
+        if (chunks.length > MAX_CHUNKS) {
+          throw new Error(`PDF produced ${chunks.length} chunks — the limit is ${MAX_CHUNKS}`);
         }
 
         const embeddings = await embedDocuments(chunks);

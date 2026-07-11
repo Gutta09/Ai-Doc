@@ -1,8 +1,8 @@
 import MaxWidthWrapper from "@/Components/MaxWidthWrapper";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@/Components/ui/button";
+import { ChatPreviewMock, UploadPreviewMock } from "@/Components/LandingPreviews";
 
 export default function Home() {
   return (
@@ -51,14 +51,7 @@ export default function Home() {
             <div className="mx-auto max-w-6xl px-6 lg:px-8 ">
               <div className="mt-16 flow-root sm:mt-24">
                 <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-                  <Image
-                    src="/dashboard-preview.jpg"
-                    width={1364}
-                    height={866}
-                    quality={100}
-                    className="rounded-md bg-white p-2 sm:p-8 md:p-20 shadow-2xl ring-1 ring-gray-900/10"
-                    alt="product-preview"
-                  />
+                  <ChatPreviewMock />
                 </div>
               </div>
             </div>
@@ -101,13 +94,7 @@ export default function Home() {
                 Sign up for an account
               </span>
               <span className="mt-2 text-zinc-700">
-                Either starting out with a free plan or choose our{" "}
-                <Link
-                  href="/pricing"
-                  className="text-blue-700 underline-offset-2"
-                >
-                  pro plan.
-                </Link>
+                Create a free account with your email — it takes a few seconds.
               </span>
             </div>
           </li>
@@ -140,14 +127,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-6 lg:px-8 ">
           <div className="mt-16 flow-root sm:mt-24">
             <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-              <Image
-                src="/file-upload-preview.jpg"
-                width={1419}
-                height={732}
-                quality={100}
-                className="rounded-md bg-white p-2 sm:p-8 md:p-20 shadow-2xl ring-1 ring-gray-900/10"
-                alt="upload-preview"
-              />
+              <UploadPreviewMock />
             </div>
           </div>
         </div>
